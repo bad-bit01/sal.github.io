@@ -17,7 +17,7 @@ Welcome to my GitHub Pages portfolio! I'm passionate about building intelligent 
 
 ## 📄 [View My CV](assets/CV-SaloniPathak.pdf)
 
-## 📝 [Read My Blog](blog/index.html)
+## 📝 [Read My Blog](https://bad-bit01.github.io/saloni-journal/blog/index.html)
 
 I intend to write about my research, daily learnings, and thoughts on software engineering, robotics, and beyond.
 
