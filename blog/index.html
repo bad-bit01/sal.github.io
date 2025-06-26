@@ -19,7 +19,7 @@
         const list = document.getElementById('blog-list');
         posts.forEach(post => {
           const li = document.createElement('li');
-          li.innerHTML = `<a href="${post.file}">${post.title}</a> <small>(${post.date})</small>`;
+          li.innerHTML = `<a href="./blogs/${post.file}">${post.title}</a> <small>(${post.date})</small>`;
           list.appendChild(li);
           });
       });
