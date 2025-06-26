@@ -1,6 +1,7 @@
+
 body {
-  background-color: #121212;
-  color: #e0e0e0;
+  background-color: #1C1C1C;
+  color: #A0A0A0;
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
@@ -13,7 +14,7 @@ body {
 }
 
 a {
-  color: #64ffda;
+  color: #A0A0A0;
   text-decoration: none;
   margin: 0 15px;
   font-size: 1.2em;
@@ -36,11 +37,11 @@ footer {
 }
 
 .blog-post {
-  border: 1px solid #ddd;
+  border: 1px solid #333;
   border-radius: 8px;
   padding: 16px;
-  background-color: #fdfdfd;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  background-color: #2A2A2A;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.05);
   transition: transform 0.2s ease;
 }
 
@@ -51,15 +52,15 @@ footer {
 .blog-post h3 {
   margin: 0 0 8px;
   font-size: 1.25rem;
+  color: #D0D0D0;
 }
 
 .blog-post .description {
   margin: 0 0 8px;
-  color: #555;
+  color: #B0B0B0;
 }
 
 .blog-post .date {
   font-size: 0.85rem;
   color: #888;
 }
-
