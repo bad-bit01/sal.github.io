@@ -9,11 +9,22 @@
   <div class="container">
     <h1>📝 Blog</h1>
     <p>Welcome to my blog! Here you'll find my thoughts, research, and daily learnings.</p>
-    <ul>
-      <li><a href="blogs/1.html">First Post</a></li>
-      <li><a href="blogs/2.html">My Final Year Project Summary</a></li>
-    </ul>
-    <a href="../index.html">← Back to Home</a>
+  <h2>Blog Archive</h2>
+  <ul id="blog-list"></ul>
+
+  <script>
+    fetch('../posts.json')
+      .then(response => response.json())
+      .then(posts => {
+        const list = document.getElementById('blog-list');
+        posts.forEach(post => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="${post.file}">${post.title}</a> <small>(${post.date})</small>`;
+          list.appendChild(li);
+          });
+      });
+  </script>
+  <a href="../index.html">← Back to Home</a>
   </div>
 </body>
 </html>
