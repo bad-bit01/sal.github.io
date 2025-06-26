@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,27 +14,9 @@
     <h2>Blog Archive</h2>
     <div id="blog-list" class="blog-grid"></div>
 
-    <script>
-      fetch('../posts.json')
-        .then(response => response.json())
-        .then(posts => {
-          const list = document.getElementById('blog-list');
-          posts.forEach(post => {
-            const container = document.createElement('div');
-            container.className = 'blog-post';
+    <script src="blog-loader.js" defer></script>
 
-            container.innerHTML = `
-              <h3><a href="./blogs/${post.file}">${post.title}</a></h3>
-              <p class="description">${post.description}</p>
-              <small class="date">${post.date}</small>
-            `;
-
-            list.appendChild(container);
-          });
-        });
-    </script>
-
-  <a href="../index.html">← Back to Home</a>
+    <a href="../index.html">← Back to Home</a>
   </div>
 </body>
 </html>
