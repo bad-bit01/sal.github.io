@@ -1,14 +1,14 @@
 [
   {
+    "id": "1",
     "title": "First Blog Post",
     "description": "My first blog post",
-    "file": "1.html",
     "date": "2025-06-26"
   },
   {
+    "id": "2",
     "title": "Automating Attendance with Face Recognition: A Final-Year Project Journey",
     "description": "A deep dive into building a real-time attendance system using face recognition and machine learning.",
-    "date": "2024-04-15",
-    "file": "2.html"
+    "date": "2024-04-15"
   }
 ]
