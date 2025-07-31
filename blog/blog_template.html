@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <title id="post-title">Blog Post</title>
-  <link rel="stylesheet" href="../../style.css" />
+  <script>
+    // Dynamically set the CSS path based on environment
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const repoPath = isGitHubPages ? '/saloni-journal' : '../..';
+    document.write(`<link rel="stylesheet" href="${repoPath}/style.css" />`);
+  </script>
 </head>
 <body>
   <div class="layout">
     <nav class="left-nav">
       <div class="nav-links">
-        <a href="../../index.html">🏠 Home</a>
-        <a href="../../about.html">👋 About</a>
-        <a href="../index.html">📝 Blog</a>
-        <a href="../../contact.html">📬 Contact</a>
-        <a href="../../assets/CV-SaloniPathak.pdf" target="_blank">📄 View CV</a>
+        <script>
+          const basePath = isGitHubPages ? '/saloni-journal' : '../..';
+          document.write(`
+            <a href="${basePath}/index.html">🏠 Home</a>
+            <a href="${basePath}/about.html">👋 About</a>
+            <a href="${basePath}/blog/index.html">📝 Blog</a>
+            <a href="${basePath}/contact.html">📬 Contact</a>
+            <a href="${basePath}/assets/CV-SaloniPathak.pdf" target="_blank">📄 View CV</a>
+          `);
+        </script>
       </div>
     </nav>
 
@@ -36,7 +46,10 @@
     <a href="https://github.com/bad-bit01" target="_blank">💻 GitHub</a>
   </footer>
 
-  <script src="../blog-loader.js"></script>
+  <script>
+    const scriptPath = isGitHubPages ? '/saloni-journal/blog/blog-loader.js' : '../blog-loader.js';
+    document.write(`<script src="${scriptPath}"><\/script>`);
+  </script>
   <script>
     // Load blog content
     document.addEventListener('DOMContentLoaded', function() {

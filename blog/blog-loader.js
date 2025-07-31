@@ -1,41 +1,32 @@
 function getPathDetails() {
-  const path = window.location.pathname.toLowerCase();    const date = new Date(post.date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-
-    // Get the original index for this post
-    const postId = (index + 1).toString();
-    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
-
-    container.innerHTML = `
-      <h3><a href="${postPath}">${post.title}</a></h3>
-      <p class="description">${post.description}</p>
-      <small class="date">${date}</small>
-    `;
-
-    list.appendChild(container);Pages = window.location.hostname.includes('github.io');
-  const isInBlogDir = path.includes('/blog/');
+  const path = window.location.pathname.toLowerCase();
+  const isGitHubPages = window.location.hostname.includes('github.io');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
+  const isInBlogDir = path.includes('/blog/');
+  const isInBlogPost = path.includes('/blog/blogs/');
   
-  // Handle different depths in the blog directory
   let pathPrefix;
-  if (path.includes('/blog/blogs/')) {
-    pathPrefix = '../..';
-  } else if (isInBlogDir) {
-    pathPrefix = '..';
+  if (isGitHubPages) {
+    // In GitHub Pages, always use absolute paths from repo root
+    pathPrefix = repoPath;
   } else {
-    pathPrefix = '.';
+    // In local development, use relative paths
+    if (isInBlogPost) {
+      pathPrefix = '../..';
+    } else if (isInBlogDir) {
+      pathPrefix = '..';
+    } else {
+      pathPrefix = '.';
+    }
   }
   
   return {
-    postsJson: `${repoPath}/posts.json`,
-    blogPath: `${repoPath}/blog`,
-    rootPath: repoPath,
+    postsJson: `${pathPrefix}/posts.json`,
+    blogPath: isGitHubPages ? `${repoPath}/blog` : (isInBlogDir ? '.' : 'blog'),
+    rootPath: pathPrefix,
     isGitHubPages,
     isInBlogDir,
-    repoPath
+    isInBlogPost
   };
 }
 
@@ -103,9 +94,9 @@ function loadBlogList(posts) {
       day: 'numeric'
     });
 
-    // Use index + 1 as the file name if id is not present
+    // Use index + 1 as the file name
     const postId = (index + 1).toString();
-    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
+    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
 
     container.innerHTML = `
       <h3><a href="${postPath}">${post.title}</a></h3>
@@ -117,13 +108,57 @@ function loadBlogList(posts) {
   });
 }
 
+function loadPost() {
+  const paths = getPathDetails();
+  const postId = window.location.pathname.split('/').pop().replace('.html', '');
+  
+  fetch(paths.postsJson)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(posts => {
+      const post = posts[parseInt(postId) - 1];
+      if (!post) {
+        throw new Error('Post not found');
+      }
+      
+      // Update page title and blog title
+      document.title = post.title;
+      const titleElement = document.getElementById('blog-title');
+      if (titleElement) {
+        titleElement.textContent = post.title;
+      }
+      
+      // Update blog content
+      const contentElement = document.getElementById('blog-content');
+      if (contentElement) {
+        contentElement.innerHTML = post.content || 'No content available.';
+      }
+    })
+    .catch(error => {
+      console.error('Error loading post:', error);
+      const contentElement = document.getElementById('blog-content');
+      if (contentElement) {
+        contentElement.innerHTML = `Error loading post: ${error.message}`;
+      }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const paths = getPathDetails();
   console.log('Path details:', paths);
-
   console.log('Current location:', window.location.pathname);
   console.log('Loading posts from:', paths.postsJson);
 
+  // Load blog post content if we're on a blog post page
+  if (window.location.pathname.includes('/blog/blogs/')) {
+    loadPost();
+  }
+
+  // Load posts list and recent posts
   fetch(paths.postsJson)
     .then(response => {
       console.log('Response status:', response.status);
