@@ -27,13 +27,15 @@ function loadRecentPosts(posts) {
   const paths = getPathDetails();
   const basePath = paths.isGitHubPages ? paths.repoPath : '';
   
+  // Create a mapping of posts to their original indices
+  const postIndices = new Map(posts.map((post, index) => [post.title, index + 1]));
+  
   sortedPosts.forEach(post => {
     const container = document.createElement('div');
     container.className = 'recent-post-item';
 
-    // Create the post path
-    // Use index + 1 as the file name if id is not present
-    const postId = (index + 1).toString();
+    // Get the original index for this post
+    const postId = postIndices.get(post.title).toString();
     const postPath = paths.isInBlogDir 
       ? `blogs/${postId}.html`
       : `${paths.blogPath}/blogs/${postId}.html`;
