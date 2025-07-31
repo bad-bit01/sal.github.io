@@ -3,26 +3,30 @@ function getPathDetails() {
   const isGitHubPages = window.location.hostname.includes('github.io');
   const isInBlogDir = path.includes('/blog/');
   const isInBlogPost = path.includes('/blog/blogs/');
-  const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
+  // GitHub Pages - always use absolute paths from repo root
   if (isGitHubPages) {
+    const basePath = '/saloni-journal';
     return {
-      postsJson: '/saloni-journal/posts.json',
-      blogPath: '/saloni-journal/blog',
-      rootPath: '/saloni-journal',
+      postsJson: `${basePath}/posts.json`,
+      blogPath: `${basePath}/blog`,
+      rootPath: basePath,
       isGitHubPages,
       isInBlogDir,
       isInBlogPost
     };
   }
   
-  // For local development
+  // Local development - use relative paths
   let pathPrefix;
   if (isInBlogPost) {
+    // In a blog post (blog/blogs/X.html) - need to go up two levels
     pathPrefix = '../..';
   } else if (isInBlogDir) {
+    // In blog directory - need to go up one level
     pathPrefix = '..';
   } else {
+    // In root directory
     pathPrefix = '.';
   }
   
@@ -55,9 +59,12 @@ function loadRecentPosts(posts) {
     const container = document.createElement('div');
     container.className = 'recent-post-item';
 
-    // Get the original index for this post
-    const postId = postIndices.get(post.title).toString();
-    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
+    // Use post.id directly
+    const postPath = paths.isGitHubPages 
+      ? `${paths.blogPath}/blogs/${post.id}.html`  // GitHub Pages: absolute path
+      : paths.isInBlogDir 
+        ? `blogs/${post.id}.html`                  // Local in blog dir: relative to current
+        : `blog/blogs/${post.id}.html`;            // Local in root: relative to root
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -144,9 +151,12 @@ function loadBlogList(posts) {
       day: 'numeric'
     });
 
-    // Use index + 1 as the file name if id is not present
-    const postId = (index + 1).toString();
-    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
+    // Use post.id directly
+    const postPath = paths.isGitHubPages 
+      ? `${paths.blogPath}/blogs/${post.id}.html`  // GitHub Pages: absolute path
+      : paths.isInBlogDir 
+        ? `blogs/${post.id}.html`                  // Local in blog dir: relative to current
+        : `blog/blogs/${post.id}.html`;            // Local in root: relative to root
 
     container.innerHTML = `
       <h3><a href="${postPath}">${post.title}</a></h3>
