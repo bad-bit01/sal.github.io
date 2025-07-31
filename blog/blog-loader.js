@@ -5,9 +5,9 @@ function getPathDetails() {
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
   return {
-    postsJson: `${repoPath}/${isInBlogDir ? '..' : '.'}/posts.json`,
-    blogPath: `${repoPath}/${isInBlogDir ? '.' : 'blog'}`,
-    rootPath: `${repoPath}/${isInBlogDir ? '..' : '.'}`,
+    postsJson: `${repoPath}/posts.json`,
+    blogPath: `${repoPath}/blog`,
+    rootPath: repoPath,
     isGitHubPages,
     isInBlogDir,
     repoPath
@@ -25,7 +25,6 @@ function loadRecentPosts(posts) {
   const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
 
   const paths = getPathDetails();
-  const basePath = paths.isGitHubPages ? paths.repoPath : '';
   
   // Create a mapping of posts to their original indices
   const postIndices = new Map(posts.map((post, index) => [post.title, index + 1]));
@@ -36,9 +35,7 @@ function loadRecentPosts(posts) {
 
     // Get the original index for this post
     const postId = postIndices.get(post.title).toString();
-    const postPath = paths.isInBlogDir 
-      ? `blogs/${postId}.html`
-      : `${paths.blogPath}/blogs/${postId}.html`;
+    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',

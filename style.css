@@ -29,8 +29,9 @@ body {
 
 .container {
   flex: 1;
-  margin: 40px 220px;
+  margin: 40px 270px 40px 220px;
   text-align: left;
+  min-height: calc(100vh - 120px);
 }
 
 .right-sidebar {
@@ -42,6 +43,7 @@ body {
   right: 0;
   top: 0;
   overflow-y: auto;
+  z-index: 1;
 }
 
 a {
