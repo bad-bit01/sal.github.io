@@ -2,15 +2,14 @@ function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
   const isInBlogDir = path.includes('/blog/');
   const isGitHubPages = window.location.hostname.includes('github.io');
-  
-  // For GitHub Pages, we need to include the repository name in paths
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
   return {
     postsJson: isInBlogDir ? '../posts.json' : 'posts.json',
-    blogPath: isInBlogDir ? '.' : `${repoPath}/blog`,
+    blogPath: isInBlogDir ? '.' : 'blog',
     rootPath: isInBlogDir ? '..' : '.',
-    isGitHubPages: isGitHubPages
+    isGitHubPages: isGitHubPages,
+    repoPath: repoPath
   };
 }
 
@@ -25,18 +24,26 @@ function loadRecentPosts(posts) {
   const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
 
   const paths = getPathDetails();
+  const basePath = paths.isGitHubPages ? paths.repoPath : '';
+  
   sortedPosts.forEach(post => {
     const container = document.createElement('div');
     container.className = 'recent-post-item';
 
-    // Adjust the path based on whether we're in the blog directory or not
-    const postPath = paths.isGitHubPages && !window.location.pathname.includes('/blog/') 
-      ? `${paths.blogPath}/blogs/${post.file}`
-      : `blogs/${post.file}`;
+    // Create the post path
+    const postPath = paths.isInBlogDir 
+      ? `blogs/${post.id}.html`
+      : `${basePath}/blog/blogs/${post.id}.html`;
+
+    const date = new Date(post.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
 
     container.innerHTML = `
       <a href="${postPath}">${post.title}</a>
-      <div class="date">${post.date}</div>
+      <div class="date">${date}</div>
     `;
 
     recentPosts.appendChild(container);
@@ -57,14 +64,22 @@ function loadBlogList(posts) {
   
   list.innerHTML = ''; // Clear any existing content
   
+  const paths = getPathDetails();
+  
   sortedPosts.forEach(post => {
     const container = document.createElement('div');
     container.className = 'blog-post';
 
+    const date = new Date(post.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
     container.innerHTML = `
-      <h3><a href="blogs/${post.file}">${post.title}</a></h3>
+      <h3><a href="blogs/${post.id}.html">${post.title}</a></h3>
       <p class="description">${post.description}</p>
-      <small class="date">${post.date}</small>
+      <small class="date">${date}</small>
     `;
 
     list.appendChild(container);
@@ -73,10 +88,14 @@ function loadBlogList(posts) {
 
 document.addEventListener('DOMContentLoaded', function() {
   const paths = getPathDetails();
-  console.log('Current location:', window.location.pathname);
-  console.log('Loading posts from:', paths.postsJson);
+  const basePath = paths.isGitHubPages ? paths.repoPath : '';
+  const postsJsonPath = paths.isInBlogDir ? '../posts.json' : 'posts.json';
+  const fullPath = `${basePath}/${postsJsonPath}`;
 
-  fetch(paths.postsJson)
+  console.log('Current location:', window.location.pathname);
+  console.log('Loading posts from:', fullPath);
+
+  fetch(fullPath)
     .then(response => {
       console.log('Response status:', response.status);
       if (!response.ok) {
