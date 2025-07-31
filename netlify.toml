@@ -1,0 +1,39 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "max-age=180"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none';"
+
+[[headers]]
+  for = "/posts.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "max-age=180"
+
+[[headers]]
+  for = "/blog/blog-loader.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+    Cache-Control = "max-age=180"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Content-Type = "text/css"
+    Cache-Control = "max-age=180"
+
+[[headers]]
+  for = "/blog/blogs/*"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "max-age=180"
+
+[[headers]]
+  for = "/blog/blog_template.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "max-age=180"

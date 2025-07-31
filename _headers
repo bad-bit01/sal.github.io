@@ -1,0 +1,27 @@
+/*
+  Cache-Control: max-age=180
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none';
+
+/posts.json
+  Cache-Control: max-age=180
+  Content-Type: application/json
+
+/blog/blog-loader.js
+  Cache-Control: max-age=180
+  Content-Type: application/javascript
+
+/style.css
+  Cache-Control: max-age=180
+  Content-Type: text/css
+
+/blog/blogs/*
+  Cache-Control: max-age=180
+  Content-Type: text/html; charset=utf-8
+
+/blog/blog_template.html
+  Cache-Control: max-age=180
+  Content-Type: text/html; charset=utf-8
