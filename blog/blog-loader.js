@@ -2,47 +2,19 @@ function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
   const isGitHubPages = window.location.hostname.includes('github.io');
   const isInBlogDir = path.includes('/blog/');
-  const isInBlogPost = path.includes('/blog/blogs/');
+  const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
-  if (isGitHubPages) {
-    // In GitHub Pages, always use absolute paths from repo root
-    return {
-      postsJson: '/saloni-journal/posts.json',
-      blogPath: '/saloni-journal/blog',
-      rootPath: '/saloni-journal',
-      isGitHubPages,
-      isInBlogDir,
-      isInBlogPost
-    };
-  } else {
-    // In local development, use relative paths
-    let pathPrefix;
-    if (isInBlogPost) {
-      pathPrefix = '../..';
-    } else if (isInBlogDir) {
-      pathPrefix = '..';
-    } else {
-      pathPrefix = '.';
-    }
-    
-    let blogPrefix;
-    if (isInBlogPost) {
-      blogPrefix = '..';
-    } else if (isInBlogDir) {
-      blogPrefix = '.';
-    } else {
-      blogPrefix = 'blog';
-    }
-    
-    return {
-      postsJson: `${pathPrefix}/posts.json`,
-      blogPath: blogPrefix,
-      rootPath: pathPrefix,
-      isGitHubPages,
-      isInBlogDir,
-      isInBlogPost
-    };
-  }
+  // Determine relative path prefix based on current location
+  const pathPrefix = isInBlogDir ? '..' : '.';
+  
+  return {
+    postsJson: `${pathPrefix}/posts.json`,
+    blogPath: `${pathPrefix}/blog`,
+    rootPath: pathPrefix,
+    isGitHubPages,
+    isInBlogDir,
+    repoPath
+  };
 }
 
 function loadRecentPosts(posts) {
@@ -66,7 +38,7 @@ function loadRecentPosts(posts) {
 
     // Get the original index for this post
     const postId = postIndices.get(post.title).toString();
-    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
+    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -81,6 +53,50 @@ function loadRecentPosts(posts) {
 
     recentPosts.appendChild(container);
   });
+}
+
+function loadBlogPost() {
+  const postId = window.location.pathname.split('/').pop().replace('.html', '');
+  const paths = getPathDetails();
+  
+  fetch(paths.postsJson)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(posts => {
+      const post = posts.find(p => p.id === postId);
+      if (!post) {
+        throw new Error('Post not found');
+      }
+      
+      // Update page title and blog title
+      document.title = post.title;
+      const titleElement = document.getElementById('blog-title');
+      if (titleElement) {
+        titleElement.textContent = post.title;
+      }
+      
+      // Extract content without the title
+      let content = post.content;
+      // Remove the h1 title since we display it separately
+      content = content.replace(/<h1>.*?<\/h1>/, '').trim();
+      
+      // Update blog content
+      const contentElement = document.getElementById('blog-content');
+      if (contentElement) {
+        contentElement.innerHTML = content || 'No content available.';
+      }
+    })
+    .catch(error => {
+      console.error('Error loading post:', error);
+      const contentElement = document.getElementById('blog-content');
+      if (contentElement) {
+        contentElement.innerHTML = `Error loading post: ${error.message}`;
+      }
+    });
 }
 
 function loadBlogList(posts) {
@@ -109,9 +125,9 @@ function loadBlogList(posts) {
       day: 'numeric'
     });
 
-    // Use index + 1 as the file name
+    // Use index + 1 as the file name if id is not present
     const postId = (index + 1).toString();
-    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
+    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
 
     container.innerHTML = `
       <h3><a href="${postPath}">${post.title}</a></h3>
@@ -123,66 +139,6 @@ function loadBlogList(posts) {
   });
 }
 
-function loadPost() {
-  const paths = getPathDetails();
-  
-  // Extract post ID from URL, handling both local and GitHub Pages paths
-  let postId;
-  const pathname = window.location.pathname.toLowerCase();
-  if (paths.isGitHubPages) {
-    // For GitHub Pages, look for the ID in /saloni-journal/blog/blogs/N.html
-    const match = pathname.match(/\/saloni-journal\/blog\/blogs\/(\d+)\.html$/);
-    postId = match ? match[1] : null;
-  } else {
-    // For local, look for the ID in /blog/blogs/N.html
-    const match = pathname.match(/\/blog\/blogs\/(\d+)\.html$/);
-    postId = match ? match[1] : null;
-  }
-
-  if (!postId) {
-    console.error('Could not extract post ID from URL:', pathname);
-    const contentElement = document.getElementById('blog-content');
-    if (contentElement) {
-      contentElement.innerHTML = 'Error: Could not determine which blog post to load.';
-    }
-    return;
-  }
-  
-  fetch(paths.postsJson)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(posts => {
-      const post = posts.find(p => p.id === postId);
-      if (!post) {
-        throw new Error(`Post with ID ${postId} not found`);
-      }
-      
-      // Update page title and blog title
-      document.title = post.title;
-      const titleElement = document.getElementById('blog-title');
-      if (titleElement) {
-        titleElement.textContent = post.title;
-      }
-      
-      // Update blog content
-      const contentElement = document.getElementById('blog-content');
-      if (contentElement) {
-        contentElement.innerHTML = post.content || 'No content available.';
-      }
-    })
-    .catch(error => {
-      console.error('Error loading post:', error);
-      const contentElement = document.getElementById('blog-content');
-      if (contentElement) {
-        contentElement.innerHTML = `Error loading post: ${error.message}`;
-      }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   const paths = getPathDetails();
   console.log('Path details:', paths);
@@ -191,10 +147,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load blog post content if we're on a blog post page
   if (window.location.pathname.includes('/blog/blogs/')) {
-    loadPost();
+    loadBlogPost();
   }
 
-  // Load posts list and recent posts
   fetch(paths.postsJson)
     .then(response => {
       console.log('Response status:', response.status);
