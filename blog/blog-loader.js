@@ -79,14 +79,14 @@ function loadBlogPost() {
         titleElement.textContent = post.title;
       }
       
-      // Extract content without the title
-      let content = post.content;
-      // Remove the h1 title since we display it separately
-      content = content.replace(/<h1>.*?<\/h1>/, '').trim();
-      
-      // Update blog content
+      // Update blog content, stripping out the title
       const contentElement = document.getElementById('blog-content');
       if (contentElement) {
+        let content = post.content;
+        // Remove the h1 title since we display it separately
+        content = content.replace(/<h1>.*?<\/h1>/, '').trim();
+        // If content starts with a newline or paragraph after title removal, clean that up too
+        content = content.replace(/^(?:\s*<br\s*\/?>\s*|\s*<p>\s*<\/p>\s*)*/, '');
         contentElement.innerHTML = content || 'No content available.';
       }
     })
