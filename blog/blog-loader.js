@@ -25,9 +25,18 @@ function getPathDetails() {
       pathPrefix = '.';
     }
     
+    let blogPrefix;
+    if (isInBlogPost) {
+      blogPrefix = '..';
+    } else if (isInBlogDir) {
+      blogPrefix = '.';
+    } else {
+      blogPrefix = 'blog';
+    }
+    
     return {
       postsJson: `${pathPrefix}/posts.json`,
-      blogPath: isInBlogDir ? '.' : 'blog',
+      blogPath: blogPrefix,
       rootPath: pathPrefix,
       isGitHubPages,
       isInBlogDir,
