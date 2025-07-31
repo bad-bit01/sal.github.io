@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Saloni's Blog</title>
-  <link rel="stylesheet" href="../style.css?v=2" />
+  <title id="post-title">Blog Post</title>
+  <link rel="stylesheet" href="../style.css" />
 </head>
 <body>
   <div class="layout">
@@ -19,11 +18,8 @@
     </nav>
 
     <div class="container">
-      <h1>📝 Blog</h1>
-      <p>Welcome to my blog! Here you'll find my thoughts, research, and daily learnings.</p>
-
-      <h2>Blog Archive</h2>
-      <div id="blog-list" class="blog-grid"></div>
+      <h1 id="blog-title">Loading...</h1>
+      <div id="blog-content">Loading content...</div>
     </div>
 
     <aside class="right-sidebar">
@@ -40,6 +36,6 @@
     <a href="https://github.com/bad-bit01" target="_blank">💻 GitHub</a>
   </footer>
 
-  <script src="blog-loader.js" defer></script>
+  <script src="load-post.js"></script>
 </body>
 </html>
