@@ -28,10 +28,14 @@ function loadPost() {
   const postId = window.location.pathname.split('/').pop().replace('.html', '');
   const isGitHubPages = window.location.hostname.includes('github.io');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
-  const basePath = window.location.pathname.includes('/blog/') ? '..' : '.';
+  const path = window.location.pathname.toLowerCase();
+  const isInBlogDir = path.includes('/blog/');
+  const basePath = `${repoPath}/${isInBlogDir ? '..' : '.'}/blog`;
+  
+  console.log('Loading post from:', `${basePath}/posts/${postId}.json`);
   
   // Fetch the post JSON
-  fetch(`${repoPath}${basePath}/blog/posts/${postId}.json`)
+  fetch(`${basePath}/posts/${postId}.json`)
     .then(response => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       return response.json();

@@ -1,15 +1,16 @@
 function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
-  const isInBlogDir = path.includes('/blog/');
   const isGitHubPages = window.location.hostname.includes('github.io');
+  const isInBlogDir = path.includes('/blog/');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
   return {
-    postsJson: isInBlogDir ? '../posts.json' : 'posts.json',
-    blogPath: isInBlogDir ? '.' : 'blog',
-    rootPath: isInBlogDir ? '..' : '.',
-    isGitHubPages: isGitHubPages,
-    repoPath: repoPath
+    postsJson: `${repoPath}/${isInBlogDir ? '..' : '.'}/posts.json`,
+    blogPath: `${repoPath}/${isInBlogDir ? '.' : 'blog'}`,
+    rootPath: `${repoPath}/${isInBlogDir ? '..' : '.'}`,
+    isGitHubPages,
+    isInBlogDir,
+    repoPath
   };
 }
 
@@ -33,7 +34,7 @@ function loadRecentPosts(posts) {
     // Create the post path
     const postPath = paths.isInBlogDir 
       ? `blogs/${post.id}.html`
-      : `${basePath}/blog/blogs/${post.id}.html`;
+      : `${paths.blogPath}/blogs/${post.id}.html`;
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -88,14 +89,12 @@ function loadBlogList(posts) {
 
 document.addEventListener('DOMContentLoaded', function() {
   const paths = getPathDetails();
-  const basePath = paths.isGitHubPages ? paths.repoPath : '';
-  const postsJsonPath = paths.isInBlogDir ? '../posts.json' : 'posts.json';
-  const fullPath = `${basePath}/${postsJsonPath}`;
+  console.log('Path details:', paths);
 
   console.log('Current location:', window.location.pathname);
-  console.log('Loading posts from:', fullPath);
+  console.log('Loading posts from:', paths.postsJson);
 
-  fetch(fullPath)
+  fetch(paths.postsJson)
     .then(response => {
       console.log('Response status:', response.status);
       if (!response.ok) {
