@@ -24,8 +24,9 @@ function renderPostContent(content) {
 }
 
 function loadPost() {
-  // Get the post ID from the URL
-  const postId = window.location.pathname.split('/').pop().replace('.html', '');
+  // Get the post ID from the URL (number from the filename)
+  const filename = window.location.pathname.split('/').pop();
+  const postId = filename ? filename.replace('.html', '') : '1';
   const isGitHubPages = window.location.hostname.includes('github.io');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   const path = window.location.pathname.toLowerCase();

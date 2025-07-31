@@ -32,9 +32,11 @@ function loadRecentPosts(posts) {
     container.className = 'recent-post-item';
 
     // Create the post path
+    // Use index + 1 as the file name if id is not present
+    const postId = (index + 1).toString();
     const postPath = paths.isInBlogDir 
-      ? `blogs/${post.id}.html`
-      : `${paths.blogPath}/blogs/${post.id}.html`;
+      ? `blogs/${postId}.html`
+      : `${paths.blogPath}/blogs/${postId}.html`;
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -67,7 +69,7 @@ function loadBlogList(posts) {
   
   const paths = getPathDetails();
   
-  sortedPosts.forEach(post => {
+  sortedPosts.forEach((post, index) => {
     const container = document.createElement('div');
     container.className = 'blog-post';
 
@@ -77,8 +79,11 @@ function loadBlogList(posts) {
       day: 'numeric'
     });
 
+    // Use index + 1 as the file name if id is not present
+    const postId = (index + 1).toString();
+
     container.innerHTML = `
-      <h3><a href="blogs/${post.id}.html">${post.title}</a></h3>
+      <h3><a href="blogs/${postId}.html">${post.title}</a></h3>
       <p class="description">${post.description}</p>
       <small class="date">${date}</small>
     `;
