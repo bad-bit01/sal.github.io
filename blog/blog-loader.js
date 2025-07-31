@@ -1,17 +1,25 @@
 function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
   const isInBlogDir = path.includes('/blog/');
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  
+  // For GitHub Pages, we need to include the repository name in paths
+  const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
   return {
     postsJson: isInBlogDir ? '../posts.json' : 'posts.json',
-    blogPath: isInBlogDir ? '.' : 'blog',
-    rootPath: isInBlogDir ? '..' : '.'
+    blogPath: isInBlogDir ? '.' : `${repoPath}/blog`,
+    rootPath: isInBlogDir ? '..' : '.',
+    isGitHubPages: isGitHubPages
   };
 }
 
 function loadRecentPosts(posts) {
   const recentPosts = document.getElementById('recent-posts');
   if (!recentPosts) return;
+
+  // Clear existing content
+  recentPosts.innerHTML = '';
 
   // Sort posts by date and take the 3 most recent
   const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
@@ -21,8 +29,13 @@ function loadRecentPosts(posts) {
     const container = document.createElement('div');
     container.className = 'recent-post-item';
 
+    // Adjust the path based on whether we're in the blog directory or not
+    const postPath = paths.isGitHubPages && !window.location.pathname.includes('/blog/') 
+      ? `${paths.blogPath}/blogs/${post.file}`
+      : `blogs/${post.file}`;
+
     container.innerHTML = `
-      <a href="${paths.blogPath}/blogs/${post.file}">${post.title}</a>
+      <a href="${postPath}">${post.title}</a>
       <div class="date">${post.date}</div>
     `;
 
