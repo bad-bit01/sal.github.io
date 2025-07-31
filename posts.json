@@ -3,12 +3,14 @@
     "id": "1",
     "title": "First Blog Post",
     "description": "My first blog post",
-    "date": "2025-06-26"
+    "date": "2025-06-26",
+    "content": "<h1>First Blog Post</h1><p>Welcome to my blog! This is where I'll share my daily learnings, research, and thoughts on software engineering, AI, and robotics.</p><p>Stay tuned for more content as I document my journey through technology and innovation!</p>"
   },
   {
     "id": "2",
     "title": "Automating Attendance with Face Recognition: A Final-Year Project Journey",
     "description": "A deep dive into building a real-time attendance system using face recognition and machine learning.",
-    "date": "2024-04-15"
+    "date": "2024-04-15",
+    "content": "<h1>Automating Attendance with Face Recognition: A Final-Year Project Journey</h1><p>For my final year engineering project, I tackled a common challenge in educational institutions: manual attendance tracking. Here's the story of how we built an automated attendance system using face recognition.</p><h2>The Problem</h2><p>Traditional attendance systems in schools and colleges face several challenges:</p><ul><li>Manual attendance is time-consuming and prone to errors</li><li>Paper-based systems are inefficient and waste resources</li><li>Proxy attendance is a common issue</li><li>Manual data entry is required for digital records</li></ul><h2>Our Solution</h2><p>We developed a real-time attendance system that uses:</p><ul><li>Face recognition for contactless attendance marking</li><li>Deep learning for accurate face detection and recognition</li><li>Real-time processing for immediate results</li><li>Automated database updates for attendance records</li></ul><h2>Technical Implementation</h2><p>The system was built using:</p><ul><li>Python for the core application</li><li>OpenCV for image processing</li><li>dlib for face detection and recognition</li><li>SQLite for database management</li><li>Flask for the web interface</li></ul><h2>Challenges and Solutions</h2><p>During development, we faced and overcame several challenges:</p><ul><li>Improving recognition accuracy in varying lighting conditions</li><li>Optimizing processing speed for real-time performance</li><li>Handling multiple faces in a single frame</li><li>Ensuring data privacy and security</li></ul><h2>Results and Impact</h2><p>The system achieved:</p><ul><li>95% accuracy in face recognition</li><li>Reduced attendance marking time by 80%</li><li>Eliminated proxy attendance issues</li><li>Simplified attendance record management</li></ul><h2>Future Improvements</h2><p>Future enhancements could include:</p><ul><li>Mobile app integration</li><li>Cloud-based storage and processing</li><li>Integration with existing student management systems</li><li>Enhanced analytics and reporting features</li></ul><p>This project was not just about building a system; it was about solving a real-world problem and learning valuable lessons in project management, team collaboration, and technical implementation.</p>"
   }
 ]

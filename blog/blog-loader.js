@@ -125,7 +125,28 @@ function loadBlogList(posts) {
 
 function loadPost() {
   const paths = getPathDetails();
-  const postId = window.location.pathname.split('/').pop().replace('.html', '');
+  
+  // Extract post ID from URL, handling both local and GitHub Pages paths
+  let postId;
+  const pathname = window.location.pathname.toLowerCase();
+  if (paths.isGitHubPages) {
+    // For GitHub Pages, look for the ID in /saloni-journal/blog/blogs/N.html
+    const match = pathname.match(/\/saloni-journal\/blog\/blogs\/(\d+)\.html$/);
+    postId = match ? match[1] : null;
+  } else {
+    // For local, look for the ID in /blog/blogs/N.html
+    const match = pathname.match(/\/blog\/blogs\/(\d+)\.html$/);
+    postId = match ? match[1] : null;
+  }
+
+  if (!postId) {
+    console.error('Could not extract post ID from URL:', pathname);
+    const contentElement = document.getElementById('blog-content');
+    if (contentElement) {
+      contentElement.innerHTML = 'Error: Could not determine which blog post to load.';
+    }
+    return;
+  }
   
   fetch(paths.postsJson)
     .then(response => {
@@ -135,9 +156,9 @@ function loadPost() {
       return response.json();
     })
     .then(posts => {
-      const post = posts[parseInt(postId) - 1];
+      const post = posts.find(p => p.id === postId);
       if (!post) {
-        throw new Error('Post not found');
+        throw new Error(`Post with ID ${postId} not found`);
       }
       
       // Update page title and blog title
