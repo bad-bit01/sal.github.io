@@ -61,10 +61,10 @@ function loadRecentPosts(posts) {
 
     // Use post.id directly
     const postPath = paths.isGitHubPages 
-      ? `${paths.blogPath}/blogs/${post.id}.html`  // GitHub Pages: absolute path
+      ? `/saloni-journal/blog/blogs/${post.id}.html`  // GitHub Pages: absolute path from root
       : paths.isInBlogDir 
-        ? `blogs/${post.id}.html`                  // Local in blog dir: relative to current
-        : `blog/blogs/${post.id}.html`;            // Local in root: relative to root
+        ? `blogs/${post.id}.html`                     // Local in blog dir: relative to current
+        : `blog/blogs/${post.id}.html`;               // Local in root: relative to root
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -153,10 +153,10 @@ function loadBlogList(posts) {
 
     // Use post.id directly
     const postPath = paths.isGitHubPages 
-      ? `${paths.blogPath}/blogs/${post.id}.html`  // GitHub Pages: absolute path
+      ? `/saloni-journal/blog/blogs/${post.id}.html`  // GitHub Pages: absolute path from root
       : paths.isInBlogDir 
-        ? `blogs/${post.id}.html`                  // Local in blog dir: relative to current
-        : `blog/blogs/${post.id}.html`;            // Local in root: relative to root
+        ? `blogs/${post.id}.html`                     // Local in blog dir: relative to current
+        : `blog/blogs/${post.id}.html`;               // Local in root: relative to root
 
     container.innerHTML = `
       <h3><a href="${postPath}">${post.title}</a></h3>
