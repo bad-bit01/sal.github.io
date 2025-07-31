@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="post-title">Loading...</title>
+  <script>
+    // Dynamically set the CSS path based on environment
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const repoPath = isGitHubPages ? '/saloni-journal' : '../..';
+    document.write(`<link rel="stylesheet" href="${repoPath}/style.css" />`);
+  </script>
+</head>
+<body>
+  <div class="layout">
+    <nav class="left-nav">
+      <div class="nav-links">
+        <script>
+          const basePath = isGitHubPages ? '/saloni-journal' : '../..';
+          document.write(`
+            <a href="${basePath}/index.html">🏠 Home</a>
+            <a href="${basePath}/about.html">👋 About</a>
+            <a href="${basePath}/blog/index.html">📝 Blog</a>
+            <a href="${basePath}/contact.html">📬 Contact</a>
+            <a href="${basePath}/assets/CV-SaloniPathak.pdf" target="_blank">📄 View CV</a>
+          `);
+        </script>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 id="blog-title">Loading...</h1>
+      <div id="blog-content">Loading content...</div>
+      
+      <div class="post-navigation">
+        <a href="../index.html">← Back to Blog</a>
+      </div>
+    </div>
+
+    <aside class="right-sidebar">
+      <h3>Recent Posts</h3>
+      <div class="recent-posts" id="recent-posts">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <a href="mailto:pathak.saloni.de@gmail.com">📧 Email</a>
+    <a href="https://www.linkedin.com/in/saloni-pathak-a35016166/" target="_blank">🔗 LinkedIn</a>
+    <a href="https://github.com/bad-bit01" target="_blank">💻 GitHub</a>
+  </footer>
+
+  <script>
+    const scriptPath = isGitHubPages ? '/saloni-journal/blog/blog-loader.js' : '../blog-loader.js';
+    document.write(`<script src="${scriptPath}"><\/script>`);
+  </script>
+</body>
+</html>
