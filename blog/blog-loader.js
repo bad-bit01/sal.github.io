@@ -2,10 +2,29 @@ function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
   const isGitHubPages = window.location.hostname.includes('github.io');
   const isInBlogDir = path.includes('/blog/');
+  const isInBlogPost = path.includes('/blog/blogs/');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
-  // Determine relative path prefix based on current location
-  const pathPrefix = isInBlogDir ? '..' : '.';
+  if (isGitHubPages) {
+    return {
+      postsJson: '/saloni-journal/posts.json',
+      blogPath: '/saloni-journal/blog',
+      rootPath: '/saloni-journal',
+      isGitHubPages,
+      isInBlogDir,
+      isInBlogPost
+    };
+  }
+  
+  // For local development
+  let pathPrefix;
+  if (isInBlogPost) {
+    pathPrefix = '../..';
+  } else if (isInBlogDir) {
+    pathPrefix = '..';
+  } else {
+    pathPrefix = '.';
+  }
   
   return {
     postsJson: `${pathPrefix}/posts.json`,
@@ -13,7 +32,7 @@ function getPathDetails() {
     rootPath: pathPrefix,
     isGitHubPages,
     isInBlogDir,
-    repoPath
+    isInBlogPost
   };
 }
 
