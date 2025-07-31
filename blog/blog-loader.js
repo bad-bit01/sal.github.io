@@ -4,10 +4,13 @@ function getPathDetails() {
   const isInBlogDir = path.includes('/blog/');
   const repoPath = isGitHubPages ? '/saloni-journal' : '';
   
+  // Determine relative path prefix based on current location
+  const pathPrefix = isInBlogDir ? '..' : '.';
+  
   return {
-    postsJson: `${repoPath}/posts.json`,
-    blogPath: `${repoPath}/blog`,
-    rootPath: repoPath,
+    postsJson: `${pathPrefix}/posts.json`,
+    blogPath: `${pathPrefix}/blog`,
+    rootPath: pathPrefix,
     isGitHubPages,
     isInBlogDir,
     repoPath
@@ -35,7 +38,7 @@ function loadRecentPosts(posts) {
 
     // Get the original index for this post
     const postId = postIndices.get(post.title).toString();
-    const postPath = `${paths.blogPath}/blogs/${postId}.html`;
+    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
 
     const date = new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -80,9 +83,10 @@ function loadBlogList(posts) {
 
     // Use index + 1 as the file name if id is not present
     const postId = (index + 1).toString();
+    const postPath = paths.isInBlogDir ? `blogs/${postId}.html` : `blog/blogs/${postId}.html`;
 
     container.innerHTML = `
-      <h3><a href="blogs/${postId}.html">${post.title}</a></h3>
+      <h3><a href="${postPath}">${post.title}</a></h3>
       <p class="description">${post.description}</p>
       <small class="date">${date}</small>
     `;
