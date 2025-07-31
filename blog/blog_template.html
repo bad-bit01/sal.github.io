@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <title id="post-title">Blog Post</title>
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../../style.css" />
 </head>
 <body>
   <div class="layout">
     <nav class="left-nav">
       <div class="nav-links">
-        <a href="../index.html">🏠 Home</a>
-        <a href="../about.html">👋 About</a>
-        <a href="index.html">📝 Blog</a>
-        <a href="../contact.html">📬 Contact</a>
-        <a href="../assets/CV-SaloniPathak.pdf" target="_blank">📄 View CV</a>
+        <a href="../../index.html">🏠 Home</a>
+        <a href="../../about.html">👋 About</a>
+        <a href="../index.html">📝 Blog</a>
+        <a href="../../contact.html">📬 Contact</a>
+        <a href="../../assets/CV-SaloniPathak.pdf" target="_blank">📄 View CV</a>
       </div>
     </nav>
 
@@ -36,7 +36,7 @@
     <a href="https://github.com/bad-bit01" target="_blank">💻 GitHub</a>
   </footer>
 
-  <script src="blog-loader.js"></script>
+  <script src="../blog-loader.js"></script>
   <script>
     // Load blog content
     document.addEventListener('DOMContentLoaded', function() {
@@ -44,7 +44,12 @@
       const paths = getPathDetails();
       
       fetch(paths.postsJson)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then(posts => {
           const post = posts[parseInt(postId) - 1];
           if (post) {
@@ -57,7 +62,7 @@
         })
         .catch(error => {
           console.error('Error loading post:', error);
-          document.getElementById('blog-content').innerHTML = 'Error loading post';
+          document.getElementById('blog-content').innerHTML = `Error loading post: ${error.message}`;
         });
     });
   </script>
