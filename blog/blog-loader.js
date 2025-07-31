@@ -1,16 +1,22 @@
 function getPathDetails() {
   const path = window.location.pathname.toLowerCase();
   const isGitHubPages = window.location.hostname.includes('github.io');
-  const repoPath = isGitHubPages ? '/saloni-journal' : '';
   const isInBlogDir = path.includes('/blog/');
   const isInBlogPost = path.includes('/blog/blogs/');
   
-  let pathPrefix;
   if (isGitHubPages) {
     // In GitHub Pages, always use absolute paths from repo root
-    pathPrefix = repoPath;
+    return {
+      postsJson: '/saloni-journal/posts.json',
+      blogPath: '/saloni-journal/blog',
+      rootPath: '/saloni-journal',
+      isGitHubPages,
+      isInBlogDir,
+      isInBlogPost
+    };
   } else {
     // In local development, use relative paths
+    let pathPrefix;
     if (isInBlogPost) {
       pathPrefix = '../..';
     } else if (isInBlogDir) {
@@ -18,16 +24,16 @@ function getPathDetails() {
     } else {
       pathPrefix = '.';
     }
+    
+    return {
+      postsJson: `${pathPrefix}/posts.json`,
+      blogPath: isInBlogDir ? '.' : 'blog',
+      rootPath: pathPrefix,
+      isGitHubPages,
+      isInBlogDir,
+      isInBlogPost
+    };
   }
-  
-  return {
-    postsJson: `${pathPrefix}/posts.json`,
-    blogPath: isGitHubPages ? `${repoPath}/blog` : (isInBlogDir ? '.' : 'blog'),
-    rootPath: pathPrefix,
-    isGitHubPages,
-    isInBlogDir,
-    isInBlogPost
-  };
 }
 
 function loadRecentPosts(posts) {
